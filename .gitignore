@@ -1,0 +1,7 @@
+build/
+dist/
+notebook/
+venv/
+*.pdf
+*.tar.gz
+*.spec
