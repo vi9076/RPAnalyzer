@@ -6,7 +6,6 @@ import logging
 import tarfile
 import tempfile
 import numpy as np
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -28,7 +27,8 @@ def extract_rp_data(filename, temp_path):
 
     # Fix the path separator
     path = path.replace(os.path.sep, '/')
-    data_files = ["%s/%s" % (path, f) for f in os.listdir(path) if isfile(join(path, f))]
+    data_files = ["%s/%s" % (path, f)
+                  for f in os.listdir(path) if isfile(join(path, f))]
 
     for f in data_files:
         logging.debug("Found File: %s" % (f, ))
@@ -64,7 +64,8 @@ def generate_cluster_plot(rp_data, site, statistic, pdf):
     plot_data.set_index(['time from'], inplace=True)
     plot_unit = plot_data["unit"].unique()[0]
 
-    plot_data["value"].plot(figsize=(10, 7), title="%s\n%s" % (site, statistic.strip()))
+    plot_data["value"].plot(figsize=(10, 7),
+                            title="%s\n%s" % (site, statistic.strip()))
     plt.style.use('ggplot')
     plt.ylabel(plot_unit)
     plt.xlabel("Date")
@@ -83,7 +84,10 @@ def generate_rpa_plot(rp_data, site, rpa, statistic, pdf):
     plot_data.set_index(['time from'], inplace=True)
     plot_unit = plot_data["unit"].unique()[0]
 
-    plot_data["value"].plot(figsize=(10, 7), title="%s - %s\n%s" % (site, rpa, statistic.strip()))
+    plot_data["value"].plot(figsize=(10, 7),
+                            title="%s - %s\n%s" % (site,
+                                                   rpa,
+                                                   statistic.strip()))
     plt.ylabel(plot_unit)
     plt.xlabel("Date")
     plt.ylim(ymin=0)
@@ -164,7 +168,9 @@ def main():
                                     (rp_data["peak"].isnull()) &
                                     (rp_data["group"].isnull())]
 
-                for index, row in rpa_stats[["box", "stat"]].drop_duplicates().iterrows():
+                my_stats = rpa_stats[["box", "stat"]].drop_duplicates()
+
+                for index, row in my_stats.iterrows():
                     generate_rpa_plot(rp_data, site, row["box"],
                                       row["stat"], pdf)
 
@@ -174,7 +180,11 @@ def main():
                 group_stats = rp_data[(rp_data["site"] == site) &
                                       (~rp_data["group"].isnull())
                                       ]
-                for index, row in group_stats[["box", "group", "stat"]].drop_duplicates().iterrows():
+
+                my_stats = group_stats[["box",
+                                        "group", "stat"]].drop_duplicates()
+
+                for index, row in my_stats.iterrows():
                     generate_group_plot(rp_data, site, row["box"],
                                         row["group"], row["stat"], pdf)
 
