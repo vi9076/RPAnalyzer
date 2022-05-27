@@ -41,7 +41,7 @@ def import_data(data_files):
     files_read = 1
     rp_data = None
     for statfile in data_files:
-        print "Reading %d/%d - %s" % (files_read, len(data_files), statfile)
+        print("Reading %d/%d - %s" % (files_read, len(data_files), statfile))
         if files_read == 1:
             rp_data = pd.read_csv(statfile, usecols=range(13),
                                   parse_dates=[0, 1])
@@ -154,13 +154,13 @@ def main():
                 site_data = rp_data[(rp_data["site"] == site) &
                                     (rp_data["box"].isnull())]
 
-                print site
-                print "- Generating Site Statistics"
+                print(site)
+                print("- Generating Site Statistics")
                 title_page("Cluster Graphs - Site: %s" % (site,), pdf)
                 for statistic in site_data["stat"].unique():
                     generate_cluster_plot(rp_data, site, statistic, pdf)
 
-                print "- Generating RPA Statistics"
+                print("- Generating RPA Statistics")
                 title_page("RPA Graphs - Site: %s" % (site,), pdf)
 
                 rpa_stats = rp_data[(rp_data["site"] == site) &
@@ -174,7 +174,7 @@ def main():
                     generate_rpa_plot(rp_data, site, row["box"],
                                       row["stat"], pdf)
 
-                print "- Generating Group Statistics"
+                print("- Generating Group Statistics")
                 title_page("CG Graphs - Site: %s" % (site,), pdf)
 
                 group_stats = rp_data[(rp_data["site"] == site) &
@@ -188,7 +188,7 @@ def main():
                     generate_group_plot(rp_data, site, row["box"],
                                         row["group"], row["stat"], pdf)
 
-                print "Done!\n"
+                print("Done!\n")
 
     if os.path.isdir(temp_path):
         logging.info("Cleaning up path at: %s" % (temp_path,))
