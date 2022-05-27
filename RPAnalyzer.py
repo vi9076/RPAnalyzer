@@ -59,7 +59,7 @@ def generate_cluster_plot(rp_data, site, statistic, pdf):
     plot_data = rp_data[(rp_data["site"] == site) &
                         (rp_data["peak"].isnull()) &
                         (rp_data["box"].isnull()) &
-                        (rp_data["stat"] == statistic)]
+                        (rp_data["statistic"] == statistic)]
 
     plot_data.set_index(['time from'], inplace=True)
     plot_unit = plot_data["unit"].unique()[0]
@@ -79,7 +79,7 @@ def generate_rpa_plot(rp_data, site, rpa, statistic, pdf):
     plot_data = rp_data[(rp_data["site"] == site) &
                         (rp_data["peak"].isnull()) &
                         (rp_data["box"] == rpa) &
-                        (rp_data["stat"] == statistic)]
+                        (rp_data["statistic"] == statistic)]
 
     plot_data.set_index(['time from'], inplace=True)
     plot_unit = plot_data["unit"].unique()[0]
@@ -101,7 +101,7 @@ def generate_group_plot(rp_data, site, rpa, group, statistic, pdf):
                         (rp_data["peak"].isnull()) &
                         (rp_data["box"] == rpa) &
                         (rp_data["group"] == group) &
-                        (rp_data["stat"] == statistic)]
+                        (rp_data["statistic"] == statistic)]
 
     plot_data.set_index(['time from'], inplace=True)
     plot_unit = plot_data["unit"].unique()[0]
@@ -157,7 +157,7 @@ def main():
                 print(site)
                 print("- Generating Site Statistics")
                 title_page("Cluster Graphs - Site: %s" % (site,), pdf)
-                for statistic in site_data["stat"].unique():
+                for statistic in site_data["statistic"].unique():
                     generate_cluster_plot(rp_data, site, statistic, pdf)
 
                 print("- Generating RPA Statistics")
@@ -168,11 +168,11 @@ def main():
                                     (rp_data["peak"].isnull()) &
                                     (rp_data["group"].isnull())]
 
-                my_stats = rpa_stats[["box", "stat"]].drop_duplicates()
+                my_stats = rpa_stats[["box", "statistic"]].drop_duplicates()
 
                 for index, row in my_stats.iterrows():
                     generate_rpa_plot(rp_data, site, row["box"],
-                                      row["stat"], pdf)
+                                      row["statistic"], pdf)
 
                 print("- Generating Group Statistics")
                 title_page("CG Graphs - Site: %s" % (site,), pdf)
@@ -182,11 +182,11 @@ def main():
                                       ]
 
                 my_stats = group_stats[["box",
-                                        "group", "stat"]].drop_duplicates()
+                                        "group", "statistic"]].drop_duplicates()
 
                 for index, row in my_stats.iterrows():
                     generate_group_plot(rp_data, site, row["box"],
-                                        row["group"], row["stat"], pdf)
+                                        row["group"], row["statistic"], pdf)
 
                 print("Done!\n")
 
